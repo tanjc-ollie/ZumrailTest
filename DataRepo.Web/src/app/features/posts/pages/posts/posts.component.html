@@ -1,0 +1,47 @@
+<h1>Posts</h1>
+
+<form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label for="tags">Tags:</label>
+        <input type="text" id="tags" formControlName="tags">
+        <ng-container *ngIf="postForm.get('tags')?.invalid && postForm.get('tags')?.touched">
+            <span style="color: crimson;">Required field</span>
+        </ng-container>
+    </div>
+    <div>
+        <label for="sortBy">Sort by:</label>
+        <select id="sortBy" formControlName="sortBy">
+            <option value="id">id</option>
+            <option value="likes">likes</option>
+            <option value="reads">reads</option>
+            <option value="popularity">popularity</option>
+        </select>
+    </div>
+    <div>
+        <label for="direction">Direction:</label>
+        <select id="direction" formControlName="direction">
+            <option value="asc">asc</option>
+            <option value="desc">desc</option>
+        </select>
+    </div>
+    <button type="submit">Search posts</button>
+</form>
+
+<ng-container *ngIf="posts$ | async as posts">
+    <div *ngIf="posts && posts.length > 0; else noPosts">
+        <div *ngFor="let post of posts">
+            <div style="border: 1px solid black; padding: 10px; margin: 10px; display: flex; flex-direction: column;">
+                <h3>By {{post.author}}</h3>
+                <span>Author id: {{post.authorId}}</span>
+                <span>Post id: {{post.id}}</span>
+                <span>Likes: {{post.likes}}</span>
+                <span>Reads: {{post.reads}}</span>
+                <span>Popularity: {{post.popularity}}</span>
+                <span>Tags: {{post.tags}}</span>
+            </div>
+        </div>
+    </div>
+    <ng-template #noPosts>
+        <span>No posts to show</span>
+    </ng-template>
+</ng-container>
